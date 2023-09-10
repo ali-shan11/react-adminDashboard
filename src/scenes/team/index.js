@@ -1,0 +1,98 @@
+import { Box, Typography, useTheme } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import { tokens } from "../../theme";
+import { mockDataTeam } from "../../data/mockData";
+import Header from "../../components/Header";
+import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
+import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
+import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
+
+const Team = () => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+
+  const columns = [
+    { field: "id", HeaderName: "ID" },
+    {
+      field: localStorage.getItem("mqttpayload"),
+      HeaderName: "Name",
+      flex: 1,
+      cellClassName: "name-column--cell",
+    },
+    {
+      field: "age",
+      HeaderName: "Age",
+      headerAlign: "left",
+      Align: "left",
+    },
+    { field: "phone", HeaderName: "Phone Number", flex: 1 },
+    { field: "email", HeaderName: "Email", flex: 1 },
+    {
+      field: "access",
+      HeaderName: "Access Level",
+      flex: 1,
+      renderCell: ({ row: { access } }) => {
+        return (
+          <Box
+            width="60%"
+            m="0 auto"
+            p="5px"
+            display="flex"
+            justifyContent="center"
+            borderRadius="4px"
+            backgroundColor={
+              access === "admin"
+                ? colors.greenAccent[600]
+                : access === "manager"
+                ? colors.greenAccent[700]
+                : colors.greenAccent[700]
+            }
+          >
+            {access === "admin" && <AdminPanelSettingsOutlinedIcon />}
+            {access === "manager" && <SecurityOutlinedIcon />}
+            {access === "user" && <LockOpenOutlinedIcon />}
+            <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
+              {access}
+            </Typography>
+          </Box>
+        );
+      },
+    },
+  ];
+
+  return (
+    <Box m={"20px"}>
+      <Header title="Team" subtitle="Managing the Team Members" />
+      <Box
+        m="40px 0 0 0"
+        height="75vh"
+        sx={{
+          "& .MuiDataGrid-root": {
+            border: "none",
+          },
+          "& .MuiDataGrid-cell": {
+            borderBottom: "none",
+          },
+          "& .name-column--cell": {
+            color: colors.greenAccent[300],
+          },
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: colors.blueAccent[700],
+            borderBottom: "none",
+          },
+          "& .MuiDataGrid-virtualScroller": {
+            backgroundColor: colors.primary[400],
+          },
+          "& .MuiDataGrid-footerContainer": {
+            borderTop: "none",
+            backgroundColor: colors.blueAccent[700],
+          },
+        }}
+      >
+        <DataGrid rows={mockDataTeam} columns={columns} />
+      </Box>
+    </Box>
+  );
+};
+
+export default Team;
